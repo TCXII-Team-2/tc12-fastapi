@@ -15,3 +15,4 @@ class User(Base):
         if "@" not in value:
             raise ValueError("Invalid email")
         return value
+    
