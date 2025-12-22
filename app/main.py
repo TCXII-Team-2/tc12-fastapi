@@ -19,7 +19,8 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    description="API de gestion de tickets de support avec IA et agents"
+    description="API de gestion de tickets de support avec IA et agents",
+    root_path="/api"
 )
 
 # Configuration CORS
