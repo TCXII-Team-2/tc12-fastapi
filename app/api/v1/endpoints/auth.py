@@ -10,7 +10,7 @@ from app.core.config import settings
 
 router = APIRouter(prefix="")
 
-@router.post("/login", response_model=Token)
+@router.post("/login" ) #it was response_model=Token i removed it so i can return role and name
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
@@ -24,4 +24,6 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     access_token = create_access_token(
         data={"sub": user.email}, expires_delta=access_token_expires
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer",
+            "username": user.name,
+            "role": user.role}
