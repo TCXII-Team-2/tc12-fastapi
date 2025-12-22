@@ -9,6 +9,7 @@ class User(Base):
     name = Column(String(100), index=True, nullable=False)
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+    role = Column(String(50), default="user", nullable=False);
     @validates("email")
     def validate_email(self, key, value):
         if "@" not in value:
