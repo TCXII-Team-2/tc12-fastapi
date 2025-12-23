@@ -9,6 +9,7 @@ class TicketStatus(str, enum.Enum):
     TRAITEE_AI = "traitee_ai"
     TRAITEE_AGENT = "traitee_agent"
     ESCALADE = "escalade"
+    REJETEE = "rejetee"
 
 class Ticket(Base):
     __tablename__ = "tickets"

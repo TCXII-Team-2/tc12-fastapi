@@ -37,7 +37,7 @@ def get_tickets_by_status_endpoint(
 ):
     return get_tickets_by_status(db, status)
 
-@router.get("/{ticket_id}", response_model=TicketResponse)
+@router.get("/{ticket_id}", response_model=TicketWithResponses)
 def get_ticket_endpoint(
     ticket_id: int,
     db: Session = Depends(get_db),

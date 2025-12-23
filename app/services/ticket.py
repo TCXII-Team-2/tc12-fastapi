@@ -86,20 +86,21 @@ async def create_ticket_with_workflow(db: Session, ticket: TicketCreate, user: U
         validation = workflow_result.validation or {}
 
         # 5.1 If the workflow says the query is invalid/ambiguous or needs clarification,
-        # delete the created ticket and do not store any AI response
+        # delete the ticket and return an error response
         is_valid = bool(validation.get("is_valid", True))
         needs_clarification = response_type_str == "clarification_request"
         if not is_valid or needs_clarification:
             message = validation.get("message_to_client") or "Ticket requires clarification or is invalid."
+            
+            # Delete the ticket
             try:
                 db.delete(db_ticket)
                 db.commit()
-                logger.info(
-                    f"Ticket {db_ticket.id} deleted due to validation failure or clarification needed"
-                )
+                logger.info(f"Ticket {db_ticket.id} deleted due to validation failure or clarification needed")
             except Exception as del_err:
-                logger.error(f"Failed to delete invalid ticket {db_ticket.id}: {del_err}")
-            # Surface a clear error to the client so the UI can prompt for more details
+                logger.error(f"Failed to delete invalid ticket: {del_err}")
+            
+            # Return error with rejection message
             raise HTTPException(status_code=400, detail=message)
         
         # 6. Store AI response in database
