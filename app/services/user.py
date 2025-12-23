@@ -16,7 +16,7 @@ def list_users(db: Session, skip: int = 0, limit: int = 50) -> list[User]:
 def create_user(db: Session, payload: UserCreate) -> User:
     if get_user_by_email(db, payload.email):
         raise ValueError("Email already registered")
-    user = User(name=payload.name, email=payload.email, hashed_password=get_password_hash(payload.hashed_password))
+    user = User(name=payload.name, email=payload.email, hashed_password=get_password_hash(payload.password))
     db.add(user)
     db.commit()
     db.refresh(user)

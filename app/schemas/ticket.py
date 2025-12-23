@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
 from app.models.ticket import TicketStatus
 
 class TicketBase(BaseModel):
@@ -21,6 +21,24 @@ class TicketResponse(TicketBase):
     date_creation: datetime
     user_id: int
     statut: TicketStatus
+    
+    class Config:
+        from_attributes = True
+
+
+class ResponseItem(BaseModel):
+    id: int
+    response_type: str
+    response_text: str
+    date_creation: datetime
+    agent_id: Optional[int] = None
+    
+    class Config:
+        from_attributes = True
+
+
+class TicketWithResponses(TicketResponse):
+    responses: List[ResponseItem] = []
     
     class Config:
         from_attributes = True
